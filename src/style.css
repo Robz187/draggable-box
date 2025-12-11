@@ -1,0 +1,28 @@
+body {
+  padding: 0;
+  background: black;
+  color: white;
+}
+#app {
+  position: relative;
+}
+.dragBox {
+  position: absolute;
+  background: lightseagreen;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+.header {
+  background: lightslategrey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+.content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
