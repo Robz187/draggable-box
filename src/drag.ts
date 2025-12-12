@@ -7,9 +7,8 @@ export function makeDraggable(dragBox: HTMLElement, dragHead: HTMLElement): void
 
     let app = document.getElementById('app');
     let header = document.getElementById('header');
-    const headerRect = header?.getBoundingClientRect();
-    let maxHeight = app!.clientHeight - headerRect!.height;
-    let maxWidth = app!.clientWidth;
+    let maxHeight =0;
+    let maxWidth = 0;
 
     let newLeft = 0;
     let newTop = 0;
@@ -17,8 +16,11 @@ export function makeDraggable(dragBox: HTMLElement, dragHead: HTMLElement): void
     let draggable = false;
     dragHead.addEventListener('mousedown', (e) => {
         const rect = dragBox.getBoundingClientRect();
+        const headerRect = header?.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top + headerRect!.height  ;
+        maxHeight = app!.clientHeight - headerRect!.height;
+        maxWidth = app!.clientWidth;
         boxWidth = rect.width;
         boxHeight = rect.height;
         draggable = true;
@@ -35,7 +37,6 @@ export function makeDraggable(dragBox: HTMLElement, dragHead: HTMLElement): void
         let proposedTop = e.clientY - offsetY;
         newLeft = Math.min(Math.max(proposedLeft, 0), maxWidth - boxWidth);
         newTop = Math.min(Math.max(proposedTop, 0), maxHeight  - boxHeight);
-        console.log(newTop);
         requestAnimationFrame(() => {
             dragBox.style.transform = `translate(${newLeft}px,${newTop}px)`;
         });
