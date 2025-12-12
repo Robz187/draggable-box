@@ -1,11 +1,20 @@
-body {
+*{
   padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
   background: black;
   color: white;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 #app {
-  position: relative;
+  min-height: 100vH;
+  padding: 0;
+  margin: 0;
 }
+
 .dragBox {
   position: absolute;
   background: lightseagreen;
