@@ -1,44 +1,54 @@
-export function makeDraggable(dragBox: HTMLElement, dragHead: HTMLElement): void {
-    let offsetX = 0;
-    let offsetY = 0;
+import { fromEvent, switchMap, map, takeUntil } from "rxjs";
+import { bringBoxToFront } from "./state";
 
-    let boxWidth = 0;
-    let boxHeight = 0;
+export function makeDraggable(dragBox: HTMLElement, dragHead: HTMLElement): void {
 
     let app = document.getElementById('app');
     let header = document.getElementById('header');
-    let maxHeight =0;
-    let maxWidth = 0;
+    const mouseDown$ = fromEvent<MouseEvent>(dragHead, 'mousedown');
+    const mouseUp$ = fromEvent<MouseEvent>(document, 'mouseup');
+    const mouseMove$ = fromEvent<MouseEvent>(document, 'mousemove');
 
-    let newLeft = 0;
-    let newTop = 0;
+    mouseDown$.pipe(
+        switchMap(downEvent => {
+            const element = downEvent.currentTarget as HTMLElement;
+            const id = Number(element.dataset.id);
+            const newZIndex = bringBoxToFront(id);
+            setNewZIndex(newZIndex);
+            const rect = dragBox.getBoundingClientRect();
+            const headerRect = header?.getBoundingClientRect();
 
-    let draggable = false;
-    dragHead.addEventListener('mousedown', (e) => {
-        const rect = dragBox.getBoundingClientRect();
-        const headerRect = header?.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top + headerRect!.height  ;
-        maxHeight = app!.clientHeight - headerRect!.height;
-        maxWidth = app!.clientWidth;
-        boxWidth = rect.width;
-        boxHeight = rect.height;
-        draggable = true;
-        e.preventDefault();
-    });
+            const offsetX = downEvent.clientX - rect.left;
+            const offsetY = downEvent.clientY - rect.top + headerRect!.height;
+            const maxHeight = app!.clientHeight - headerRect!.height;
+            const maxWidth = app!.clientWidth;
+            const boxWidth = rect.width;
+            const boxHeight = rect.height;
+            downEvent.preventDefault();
+            return mouseMove$.pipe(
+                map(moveEvent => {
+                    const proposedLeft = moveEvent.clientX - offsetX;
+                    const proposedTop = moveEvent.clientY - offsetY;
 
-    document.addEventListener('mouseup', (e) => {
-        draggable = false;
-    });
+                    const newLeft = Math.min(Math.max(proposedLeft, 0), maxWidth - boxWidth);
+                    const newTop = Math.min(Math.max(proposedTop, 0), maxHeight - boxHeight);
+                    return { newLeft, newTop }
 
-    document.addEventListener('mousemove', (e) => {
-        if (!draggable) return;
-        let proposedLeft = e.clientX - offsetX;
-        let proposedTop = e.clientY - offsetY;
-        newLeft = Math.min(Math.max(proposedLeft, 0), maxWidth - boxWidth);
-        newTop = Math.min(Math.max(proposedTop, 0), maxHeight  - boxHeight);
+                }), takeUntil(mouseUp$)
+            )
+        })
+    ).subscribe(position => {
+        dragTransform(position.newLeft, position.newTop);
+    })
+
+    function dragTransform(newLeft: number, newTop: number): void {
         requestAnimationFrame(() => {
             dragBox.style.transform = `translate(${newLeft}px,${newTop}px)`;
         });
-    });
+    }
+    function setNewZIndex(zIndex : number){
+        requestAnimationFrame(()=> {
+            dragBox.style.zIndex = zIndex.toString();
+        })
+    }
 }
