@@ -1,4 +1,4 @@
-import { fromEvent, switchMap, map, takeUntil, tap, buffer, debounceTime, filter } from "rxjs";
+import { fromEvent, switchMap, map, takeUntil, buffer, debounceTime, filter } from "rxjs";
 import { bringBoxToFront } from "./state";
 
 export function makeDraggable(dragBox: HTMLElement, dragHead: HTMLElement): void {
@@ -50,7 +50,7 @@ export function makeDraggable(dragBox: HTMLElement, dragHead: HTMLElement): void
             displayPosition(position.newLeft,position.newTop);
         })
 
-    mouseUp$.subscribe(() => setColor('rgb(38, 146, 141)'));
+    mouseUp$.subscribe(() => setColor('#2a2a2a'));
     doubleClick$.subscribe(()=> {
         const rect = dragBox.getBoundingClientRect();
         requestAnimationFrame(()=> {

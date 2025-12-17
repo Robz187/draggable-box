@@ -40,7 +40,10 @@ export function createBox(options : CreateBoxOptions): HTMLElement {
 
     const dragMain = document.createElement('div');
     dragMain.classList.add('content');
-    dragMain.innerText = options.config?.content.text || 'Draggable Box';
+    const dragText = document.createElement('p');
+    dragText.classList.add('content-text');
+    dragText.innerText = options.config?.content.text || 'Draggable Box';
+    dragMain.appendChild(dragText);
     const delBtn = document.createElement('button');
     delBtn.classList.add('delete');
     delBtn.innerText = '🗑️';
