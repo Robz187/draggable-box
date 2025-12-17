@@ -1,37 +1,81 @@
-*{
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  cursor: default;
 }
+
 body {
-  background: black;
+  background: #1e1e1e;
   color: white;
   box-sizing: border-box;
   overflow: hidden;
 }
+
 #app {
   min-height: 100vH;
   padding: 0;
   margin: 0;
+  border: 1px solid white;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.header-container button {
+  font-size: large;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: white;
+  transition: transform 0.15s ease, opacity 0.15s;
+
+}
+.header-container button:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
 }
 
 .dragBox {
   position: absolute;
-  background: lightseagreen;
+  border-radius: 10px;
+  background: #2a2a2a;
   will-change: transform;
   transform: translate3d(0, 0, 0);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.2s ease , transform 0.2;
 }
+
 .header {
-  background: lightslategrey;
+  background: #3a3a3a;
+  border-radius: 10px 10px 0 0 ;
+  padding:5px 7px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: default;
+  cursor: grab;
 }
+.dragBox:hover{
+  box-shadow: 0 0 8px rgba(100, 180, 255, 0.4);
+}
+
 .content {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: default;
+  flex-direction: column;
+}
+
+.delete {
+  background: none;
+  border: none;
+  cursor: pointer;
 }

@@ -31,8 +31,8 @@ export const DEFAULT_CONFIG: BoxConfig = {
       color: 'lightgrey'
     },
     start: {
-      x: 100,
-      y: 100,
+      x: 0,
+      y: 0,
     },
     size: {
       height: 200,
